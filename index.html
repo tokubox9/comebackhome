@@ -1,0 +1,517 @@
+<!doctype html><html><head><meta charset=utf8><meta name=viewport content="width=device-width,initial-scale=1,viewport-fit=cover"><style>:root{color-scheme:light;box-sizing:border-box;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}html{scroll-padding-top:env(safe-area-inset-top,0px)}body{margin:0;padding:0;font:14px -apple-system,BlinkMacSystemFont,sans-serif;background:#fff;color:#000}img{max-width:100%}[hidden]:not([hidden=until-found i]){display:none!important}</style></head><body>
+<title>동암 가는 길</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=Noto+Sans+KR:wght@400;500;700&display=swap">
+<style>
+/* Layout: one narrow column for a phone. A day switch under the header, a filled status card, the next Samsung
+   trains from the timetable, then a vertical route drawn in the real line colors (2호선 green, 1호선 blue). */
+:root{
+  --bg:#F2F5F1; --surface:#FFFFFF; --fg:#13201A; --muted:#58675E; --line:#D8E0D9;
+  --l2:#178040; --l1:#0B4FA6; --on-line:#FFFFFF; --walk:#8A978F;
+  --go:#16793A; --go-bg:#DDF2E3;
+  --hurry:#8F5300; --hurry-bg:#FBE9C6;
+  --miss:#B3261E; --miss-bg:#F9DEDB;
+  --idle-bg:#E4E9E5; --focus:#0B4FA6;
+  --font-display:'Barlow Condensed','Noto Sans KR',system-ui,sans-serif;
+  --font-body:'Noto Sans KR',system-ui,-apple-system,sans-serif;
+}
+@media (prefers-color-scheme: dark){
+  :root:not([data-theme="light"]){
+    --bg:#0D1410; --surface:#16201A; --fg:#E7EFE9; --muted:#9BAAA1; --line:#2A372F;
+    --l2:#3FCB74; --l1:#6FA3F0; --on-line:#07120B; --walk:#7C8A82;
+    --go:#6FDB93; --go-bg:#15341F;
+    --hurry:#F2B84B; --hurry-bg:#3A2B0B;
+    --miss:#FF8F87; --miss-bg:#3D1714;
+    --idle-bg:#1E2A23; --focus:#8DB6F5;
+    color-scheme:dark;
+  }
+}
+:root[data-theme="dark"]{
+  --bg:#0D1410; --surface:#16201A; --fg:#E7EFE9; --muted:#9BAAA1; --line:#2A372F;
+  --l2:#3FCB74; --l1:#6FA3F0; --on-line:#07120B; --walk:#7C8A82;
+  --go:#6FDB93; --go-bg:#15341F;
+  --hurry:#F2B84B; --hurry-bg:#3A2B0B;
+  --miss:#FF8F87; --miss-bg:#3D1714;
+  --idle-bg:#1E2A23; --focus:#8DB6F5;
+  color-scheme:dark;
+}
+
+*,*::before,*::after{box-sizing:border-box}
+body{
+  background:var(--bg); color:var(--fg);
+  font-family:var(--font-body); font-size:15px; line-height:1.55;
+  padding-block:20px 48px;
+  padding-left:max(16px,env(safe-area-inset-left,0px));
+  padding-right:max(16px,env(safe-area-inset-right,0px));
+}
+:focus-visible{outline:3px solid var(--focus);outline-offset:2px}
+.app{max-width:480px;margin-inline:auto;display:flex;flex-direction:column;gap:28px}
+
+/* header */
+.top{display:flex;align-items:flex-end;justify-content:space-between;gap:12px}
+.top > div{min-width:0}
+.eyebrow{margin:0;font-size:12px;letter-spacing:.06em;color:var(--muted);font-weight:500}
+h1{margin:2px 0 0;font-size:22px;line-height:1.3;font-weight:700;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.lb{display:inline-grid;place-items:center;width:22px;height:22px;border-radius:50%;font-size:13px;font-weight:700;color:var(--on-line);background:var(--l2);flex:none}
+.lb.l1{background:var(--l1)}
+.clock{font-family:var(--font-display);font-size:32px;font-weight:600;font-variant-numeric:tabular-nums;color:var(--muted);line-height:1}
+
+/* which timetable */
+.daybox{display:flex;flex-direction:column;gap:6px;margin-top:-12px}
+.daybar{display:flex;align-items:center;justify-content:space-between;gap:12px;flex-wrap:wrap}
+.daybar-label{font-size:14px;font-weight:500}
+.seg{display:inline-flex;border:1.5px solid var(--line);border-radius:12px;overflow:hidden;background:var(--surface)}
+.seg-btn{min-height:44px;padding:0 16px;border:0;background:var(--surface);color:var(--fg);font-size:14px;font-weight:500;font-family:var(--font-body);cursor:pointer}
+.seg-btn + .seg-btn{border-left:1.5px solid var(--line)}
+.seg-btn[aria-pressed="true"]{background:var(--fg);color:var(--bg);font-weight:700}
+
+/* status card */
+.status{
+  --s-fg:var(--muted);--s-bg:var(--idle-bg);
+  background:var(--s-bg);color:var(--s-fg);border-radius:20px;padding:18px 18px 20px;
+  display:flex;flex-direction:column;gap:4px;
+}
+.status[data-state="go"]{--s-fg:var(--go);--s-bg:var(--go-bg)}
+.status[data-state="hurry"]{--s-fg:var(--hurry);--s-bg:var(--hurry-bg)}
+.status[data-state="miss"]{--s-fg:var(--miss);--s-bg:var(--miss-bg)}
+.s-top{display:flex;justify-content:space-between;align-items:center;gap:8px;min-height:28px}
+.s-badge{font-size:13px;font-weight:700;border:2px solid currentColor;border-radius:999px;padding:1px 12px}
+.s-sample{font-size:12px;font-weight:500;padding:2px 10px;border-radius:999px;background:var(--surface);color:var(--muted)}
+.s-head{margin:6px 0 0;font-size:26px;line-height:1.25;font-weight:700;text-wrap:balance}
+.s-count{display:flex;flex-direction:column;gap:0;margin-top:2px}
+.digits{font-family:var(--font-display);font-weight:700;font-size:clamp(68px,24vw,104px);line-height:1;font-variant-numeric:tabular-nums;letter-spacing:.01em}
+.s-countlabel{font-size:15px;font-weight:500}
+.s-note{margin:8px 0 0;font-size:14px;color:var(--fg)}
+
+/* sections */
+.sec-head{display:flex;align-items:center;gap:8px;margin:0 0 4px;font-size:17px;font-weight:700;line-height:1.35}
+.sec-hint{margin:0 0 12px;font-size:13px;color:var(--muted)}
+
+/* next trains */
+.tlist{list-style:none;margin:0;padding:2px 16px;background:var(--surface);border:1px solid var(--line);border-radius:14px}
+.trow{display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;gap:4px 14px;padding:12px 0}
+.trow + .trow{border-top:1px solid var(--line)}
+.trow[data-k="miss"],.trow[data-k="skip"],.trow[data-k="nolink"]{opacity:.65}
+.at{font-family:var(--font-display);font-size:30px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.trow.pick .at{font-weight:700}
+.tinfo{display:flex;flex-direction:column;min-width:0}
+.tag{font-size:12px;font-weight:700;padding:1px 10px;border-radius:999px;border:1.5px solid currentColor;color:var(--muted);white-space:nowrap}
+.tag[data-k="go"]{color:var(--go);background:var(--go-bg)}
+.tag[data-k="hurry"]{color:var(--hurry);background:var(--hurry-bg)}
+.tag[data-k="miss"]{color:var(--miss);background:var(--miss-bg)}
+.small{font-size:12px;color:var(--muted)}
+
+/* route */
+.route{list-style:none;margin:12px 0 0;padding:0}
+.stop{position:relative;display:grid;grid-template-columns:20px minmax(0,1fr);column-gap:14px;padding-bottom:20px}
+.stop:last-child{padding-bottom:0}
+.stop::before{content:"";position:absolute;left:8px;top:16px;bottom:-4px;width:4px;border-radius:2px;background:var(--seg,var(--walk))}
+.stop.walk::before{background:repeating-linear-gradient(to bottom,var(--walk) 0 5px,transparent 5px 10px)}
+.stop:last-child::before{display:none}
+.dot{width:20px;height:20px;border-radius:50%;background:var(--surface);border:4px solid var(--dot,var(--walk));margin-top:2px;position:relative;z-index:1}
+.stop-row{display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.stop-name{font-weight:700;font-size:16px}
+.stop-time{font-family:var(--font-display);font-size:26px;font-weight:600;font-variant-numeric:tabular-nums;line-height:1.1}
+.leg{font-size:13px;color:var(--muted);margin-top:2px}
+.eta{display:grid;gap:6px;margin-top:8px}
+.eta-row{display:flex;justify-content:space-between;align-items:center;gap:12px;padding:8px 12px;background:var(--surface);border:1px solid var(--line);border-radius:10px}
+.eta-row .stop-time{font-size:24px}
+.eta-info{display:flex;flex-direction:column;min-width:0}
+.eta-name{font-weight:500;display:flex;align-items:center;gap:8px;flex-wrap:wrap}
+.best{font-size:11px;font-weight:700;padding:0 8px;border-radius:999px;border:1.5px solid currentColor;color:var(--go);background:var(--go-bg);white-space:nowrap}
+.empty{margin:0;padding:14px 16px;border:1px dashed var(--line);border-radius:14px;color:var(--muted);font-size:14px}
+
+/* settings */
+details.settings{border-top:1px solid var(--line);padding-top:6px}
+summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:center}
+.set-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(200px,1fr));gap:12px;margin-top:6px}
+.field{display:flex;flex-direction:column;gap:4px;font-size:13px;min-width:0}
+.field span.est{color:var(--muted)}
+.field .in{display:flex;align-items:center;gap:8px}
+.field input{width:84px;height:40px;border:1.5px solid var(--line);border-radius:10px;background:var(--surface);color:var(--fg);font-size:16px;font-family:var(--font-body);font-variant-numeric:tabular-nums;padding:0 10px}
+.field input[type="time"]{width:130px}
+.set-note{margin:12px 0 0;font-size:13px;color:var(--muted)}
+.reset{min-height:40px;padding:0 14px;border-radius:10px;border:1.5px solid var(--line);background:var(--surface);color:var(--fg);font-size:14px;font-family:var(--font-body);cursor:pointer}
+.set-actions{margin-top:10px}
+.preview{margin-top:16px}
+.foot{margin:0;font-size:12px;color:var(--muted)}
+</style>
+
+<main class="app">
+  <header class="top">
+    <div>
+      <p class="eyebrow" id="eyebrow">학원에서 집으로</p>
+      <h1 aria-label="삼성역에서 2호선, 신도림역에서 1호선으로 갈아타고 동암역">삼성<span class="lb" aria-hidden="true">2</span>신도림<span class="lb l1" aria-hidden="true">1</span>동암</h1>
+    </div>
+    <div class="clock" id="clock" aria-label="현재 시각">--:--:--</div>
+  </header>
+
+  <div class="daybox">
+    <div class="daybar" role="group" aria-label="오늘 시간표 종류">
+      <span class="daybar-label">오늘 시간표</span>
+      <div class="seg">
+        <button type="button" class="seg-btn" id="kind-wd" aria-pressed="true">평일</button>
+        <button type="button" class="seg-btn" id="kind-we" aria-pressed="false">주말·공휴일</button>
+      </div>
+    </div>
+    <p class="small">평일에 쉬는 공휴일이면 "주말·공휴일"을 눌러 주세요. 토요일과 일요일은 자동으로 맞춰져요.</p>
+  </div>
+
+  <section class="status" id="status" data-state="idle">
+    <div class="s-top">
+      <span class="s-badge" id="badge">대기</span>
+      <span class="s-sample" id="sample" hidden>미리보기 시각이에요</span>
+    </div>
+    <h2 class="s-head" id="headline" aria-live="polite">시간표를 불러오는 중이에요</h2>
+    <div class="s-count">
+      <span class="digits" id="digits">--:--</span>
+      <span class="s-countlabel" id="countlabel"></span>
+    </div>
+    <p class="s-note" id="note"></p>
+  </section>
+
+  <section>
+    <h2 class="sec-head"><span class="lb" aria-hidden="true">2</span>삼성역 다음 열차</h2>
+    <p class="sec-hint">신도림 방면 내선순환, 삼성역 출발 시각이에요. 신도림에서 갈아탈 열차가 없는 열차는 뺐어요.</p>
+    <div id="listBox"></div>
+  </section>
+
+  <section>
+    <h2 class="sec-head"><span class="lb l1" aria-hidden="true">1</span>이 열차로 가면</h2>
+    <div id="routeBox"></div>
+  </section>
+
+  <details class="settings">
+    <summary>걷는 시간과 이동 시간 바꾸기</summary>
+    <div class="set-grid">
+      <label class="field">학원에서 삼성역, 보통 걸음
+        <span class="in"><input id="s-walk" type="number" inputmode="numeric" min="1" max="60" step="1">분</span>
+      </label>
+      <label class="field">학원에서 삼성역, 빠른 걸음 <span class="est">(추정)</span>
+        <span class="in"><input id="s-fast" type="number" inputmode="numeric" min="1" max="60" step="1">분</span>
+      </label>
+      <label class="field">삼성에서 신도림, 2호선
+        <span class="in"><input id="s-ride2" type="number" inputmode="numeric" min="1" max="90" step="1">분</span>
+      </label>
+      <label class="field">신도림에서 1호선 승강장까지 환승
+        <span class="in"><input id="s-xfer" type="number" inputmode="numeric" min="0" max="30" step="1">분</span>
+      </label>
+      <label class="field">신도림에서 동암, 인천행을 탄 뒤 <span class="est">(추정)</span>
+        <span class="in"><input id="s-loc" type="number" inputmode="numeric" min="1" max="120" step="1">분</span>
+      </label>
+      <label class="field">신도림에서 동암, 급행을 탄 뒤 <span class="est">(추정)</span>
+        <span class="in"><input id="s-dir" type="number" inputmode="numeric" min="1" max="120" step="1">분</span>
+      </label>
+    </div>
+    <p class="set-note">"추정"이라고 적힌 시간은 직접 타 본 시간으로 고쳐 두면 더 정확해져요. 바꾼 값은 이 기기에 저장돼요.</p>
+    <div class="set-actions"><button type="button" class="reset" id="reset">처음 값으로 되돌리기</button></div>
+
+    <div class="field preview">시각 미리보기 (시험용)
+      <span class="in">
+        <input id="s-preview" type="time" aria-label="미리볼 시각">
+        <button type="button" class="reset" id="s-preview-clear">현재 시각으로</button>
+      </span>
+    </div>
+    <p class="set-note">낮에도 저녁 9시 이후 화면이 어떻게 나오는지 볼 수 있어요. 고른 시각부터 시간이 흘러가요.</p>
+  </details>
+
+  <p class="foot">삼성역(내선순환, 신도림 방면)과 신도림역(구로 방향) 시간표를 넣어 둔 화면이에요. 1호선은 인천행과 동인천행 급행만 안내해요. 실시간 도착 정보가 아니에요. 주말·공휴일은 신도림 시간표가 아직 없어서 환승 대기를 5분으로 추정해요.</p>
+</main>
+
+<script>
+(function(){
+//LOGIC-START
+var MIN = 60000;
+var START = 21*60;            // timetables begin at 21:00
+var WAIT_EST = 5;             // minutes waited at Sindorim when there is no timetable (weekend)
+// 삼성역 행선지: S 성수(순환), D 신도림, E 을지로입구, H 홍대입구, N 서울대입구
+var NAMES = {S:'순환', D:'신도림행', E:'을지로입구행', H:'홍대입구행', N:'서울대입구행'};
+function reaches(c){ return c !== 'N'; }   // 서울대입구행은 신도림 앞에서 끝나요
+var TABLES = {
+  wd: {label:'평일', rows:[
+    ['21:02','S'],['21:07','S'],['21:11','S'],['21:15','S'],['21:21','S'],['21:26','S'],['21:32','S'],['21:39','S'],['21:48','S'],['21:55','S'],
+    ['22:00','S'],['22:06','S'],['22:11','S'],['22:16','S'],['22:22','S'],['22:27','D'],['22:32','S'],['22:38','D'],['22:45','S'],['22:51','D'],['22:56','S'],
+    ['23:03','S'],['23:10','S'],['23:19','S'],['23:25','D'],['23:30','S'],['23:36','D']
+  ]},
+  we: {label:'주말·공휴일', rows:[
+    ['21:03','D'],['21:08','S'],['21:13','S'],['21:19','S'],['21:25','S'],['21:31','D'],['21:36','S'],['21:43','S'],['21:49','S'],['21:56','S'],
+    ['22:02','D'],['22:08','S'],['22:15','D'],['22:22','S'],['22:29','S'],['22:36','D'],['22:42','S'],['22:49','S'],['22:57','D'],
+    ['23:04','E'],['23:12','D'],['23:19','H'],['23:27','D'],['23:39','N']
+  ]}
+};
+// 신도림 출발, 구로 방향. 동암까지 가는 인천행과 동인천행 급행만 넣었어요.
+var LINE1 = {
+  wd: {
+    loc: ['21:31','21:40','21:48','21:59','22:07','22:20','22:32','22:42','22:53','23:09','23:30','23:41','23:51'],
+    exp: ['21:31','21:44','22:01','22:15','22:29','22:46','23:02']
+  },
+  we: null
+};
+var DEF = {walk:15, fast:12, ride2:34, xfer:5, rideL:30, rideE:22};
+var S = {}, k;
+for (k in DEF) S[k] = DEF[k];
+function fastEff(){ return Math.min(S.fast, S.walk); }
+function judge(rem, reach, linked){
+  if (rem < 0) return 'gone';
+  if (!reach) return 'skip';
+  if (!linked) return 'nolink';
+  if (rem - S.walk*60 >= 0) return 'go';
+  if (rem - fastEff()*60 >= 0) return 'hurry';
+  return 'miss';
+}
+// A service day runs until 04:00, so 00:30 still belongs to the evening before.
+function svcBase(ms){
+  var d = new Date(ms - 4*3600000);
+  return new Date(d.getFullYear(), d.getMonth(), d.getDate()).getTime();
+}
+function absList(base, list){
+  return list.map(function(s){
+    var p = s.split(':'), h = Number(p[0]);
+    var m = h*60 + Number(p[1]);
+    if (h < 4) m += 1440;
+    return base + m*MIN;
+  });
+}
+function firstAtOrAfter(list, ms){
+  for (var i = 0; i < list.length; i++){ if (list[i] >= ms) return list[i]; }
+  return null;
+}
+function linkFor(t, l1abs){
+  var ready = t + (S.ride2 + S.xfer)*MIN;
+  if (!l1abs){
+    return {known:false, ready:ready, ok:true,
+      loc:{dep:null, arr:ready + (WAIT_EST + S.rideL)*MIN},
+      exp:{dep:null, arr:ready + (WAIT_EST + S.rideE)*MIN}};
+  }
+  var l = firstAtOrAfter(l1abs.loc, ready), e = firstAtOrAfter(l1abs.exp, ready);
+  return {known:true, ready:ready, ok:(l !== null || e !== null),
+    loc: l === null ? null : {dep:l, arr:l + S.rideL*MIN},
+    exp: e === null ? null : {dep:e, arr:e + S.rideE*MIN}};
+}
+function options(lk){
+  var o = [];
+  if (lk.exp) o.push({name:'급행 동인천행', dep:lk.exp.dep, arr:lk.exp.arr});
+  if (lk.loc) o.push({name:'인천행', dep:lk.loc.dep, arr:lk.loc.arr});
+  o.sort(function(a, b){ return a.arr - b.arr; });
+  return o;
+}
+function evaluate(now, kind){
+  var base = svcBase(now);
+  var tb = LINE1[kind];
+  var l1abs = tb ? {loc:absList(base, tb.loc), exp:absList(base, tb.exp)} : null;
+  var all = TABLES[kind].rows.map(function(r){
+    var p = r[0].split(':'), h = Number(p[0]);
+    var m = h*60 + Number(p[1]);
+    if (h < 4) m += 1440;
+    var t = base + m*MIN, rem = (t - now)/1000, reach = reaches(r[1]);
+    var lk = linkFor(t, l1abs);
+    return {t:t, code:r[1], reach:reach, linked:lk.ok, link:lk, rem:rem, st:judge(rem, reach, lk.ok)};
+  });
+  var upcoming = all.filter(function(x){ return x.rem >= 0; });
+  var ci = -1, i;
+  for (i = 0; i < upcoming.length; i++){
+    if (upcoming[i].st === 'go' || upcoming[i].st === 'hurry'){ ci = i; break; }
+  }
+  return {
+    base: base, upcoming: upcoming, ci: ci,
+    chosen: ci >= 0 ? upcoming[ci] : null,
+    before: now + fastEff()*MIN < base + START*MIN
+  };
+}
+//LOGIC-END
+
+  try {
+    var raw = localStorage.getItem('dongam.settings');
+    if (raw) {
+      var o = JSON.parse(raw);
+      for (k in DEF) if (typeof o[k] === 'number' && isFinite(o[k]) && o[k] >= 0) S[k] = o[k];
+    }
+  } catch (e) {}
+  function save(){ try { localStorage.setItem('dongam.settings', JSON.stringify(S)); } catch (e) {} }
+
+  var $ = function(id){ return document.getElementById(id); };
+  var offset = 0;       // shifts "now" when the preview time is set
+  var listKey = '', routeKey = '';
+
+  function pad(n){ return (n < 10 ? '0' : '') + n; }
+  function clockStr(ms){ var d = new Date(ms); return pad(d.getHours()) + ':' + pad(d.getMinutes()); }
+  function msStr(sec){ sec = Math.max(0, Math.floor(sec)); return pad(Math.floor(sec/60)) + ':' + pad(sec%60); }
+  function dateKey(ms){ var d = new Date(ms); return d.getFullYear() + '-' + pad(d.getMonth()+1) + '-' + pad(d.getDate()); }
+
+  // The person can force one timetable for the current service day (public holidays are not detected).
+  var override = null;
+  try {
+    var rd = JSON.parse(localStorage.getItem('dongam.day') || 'null');
+    if (rd && typeof rd.date === 'string' && TABLES[rd.kind]) override = rd;
+  } catch (e) {}
+  function kindFor(base){
+    var dow = new Date(base).getDay();
+    if (override && override.date === dateKey(base)) return override.kind;
+    return (dow === 0 || dow === 6) ? 'we' : 'wd';
+  }
+  function chooseKind(kind){
+    override = {date: dateKey(svcBase(Date.now() + offset)), kind: kind};
+    try { localStorage.setItem('dongam.day', JSON.stringify(override)); } catch (e) {}
+    tick();
+  }
+
+  var TAG = {go:'여유', hurry:'서두르기', miss:'놓침', skip:'못 타요', nolink:'환승 불가'};
+  var BADGE = {go:'여유', hurry:'서두르기', miss:'어려워요', idle:'대기'};
+
+  function stop(name, time, leg, seg, dot, cls){
+    return '<li class="stop ' + (cls||'') + '" style="--seg:' + seg + ';--dot:' + dot + '">' +
+      '<span class="dot"></span><div><div class="stop-row"><span class="stop-name">' + name + '</span>' +
+      '<span class="stop-time">' + time + '</span></div><div class="leg">' + leg + '</div></div></li>';
+  }
+
+  function routeHTML(tr, st){
+    var trainMs = tr.t, lk = tr.link;
+    var walkMin = st === 'go' ? S.walk : fastEff();
+    var leave = trainMs - walkMin*MIN;
+    var sin = trainMs + S.ride2*MIN;
+    var opts = options(lk);
+    var rows = opts.map(function(op, i){
+      var sub;
+      if (op.dep === null){
+        sub = '시간표가 없어서 대기 ' + WAIT_EST + '분으로 추정했어요';
+      } else {
+        var w = Math.round((op.dep - lk.ready)/MIN);
+        sub = clockStr(op.dep) + ' 출발 · ' + (w <= 0 ? '승강장에 도착하면 바로 타요' : '승강장에서 ' + w + '분 기다려요');
+      }
+      return '<div class="eta-row"><div class="eta-info"><span class="eta-name">' + op.name +
+        (i === 0 ? '<span class="best">가장 빨라요</span>' : '') + '</span><span class="small">' + sub + '</span></div>' +
+        '<span class="stop-time">' + clockStr(op.arr) + '</span></div>';
+    }).join('');
+    return '<ol class="route">' +
+      stop('늦어도 학원에서 출발', clockStr(leave), '걸어서 ' + walkMin + '분 (' + (st === 'go' ? '보통' : '빠른') + ' 걸음)', 'var(--walk)', 'var(--walk)', 'walk') +
+      stop('삼성역 승차', clockStr(trainMs), '2호선 내선순환, 신도림까지 ' + S.ride2 + '분', 'var(--l2)', 'var(--l2)') +
+      stop('신도림역 도착', clockStr(sin), '내려서 1호선 승강장까지 환승 ' + S.xfer + '분', 'var(--walk)', 'var(--l2)') +
+      stop('1호선 승강장 도착', clockStr(lk.ready), lk.known ? '아래 열차 중에서 탈 수 있어요' : '신도림 시간표가 없어서 대기 시간을 추정했어요', 'var(--l1)', 'var(--l1)') +
+      '<li class="stop" style="--dot:var(--l1)"><span class="dot"></span><div><div class="stop-name">동암역 도착</div>' +
+      '<div class="eta">' + rows + '</div></div></li></ol>';
+  }
+
+  function listHTML(ev){
+    if (ev.before) return '<p class="empty">이 시간표에는 21:00 이후 열차만 들어 있어요.</p>';
+    var up = ev.upcoming;
+    if (!up.length) return '<p class="empty">시간표에 남은 열차가 없어요.</p>';
+    var n = Math.max(4, ev.ci + 2);
+    return '<ul class="tlist">' + up.slice(0, n).map(function(x, idx){
+      var m = Math.ceil(x.rem/60);
+      var pick = idx === ev.ci;
+      var lab = NAMES[x.code];
+      if (!x.reach) lab += ' · 신도림 전에서 끝나요';
+      else if (!x.linked) lab += ' · 신도림에서 갈아탈 열차가 없어요';
+      if (pick) lab += ' · 이 열차로 안내';
+      return '<li class="trow' + (pick ? ' pick' : '') + '" data-k="' + x.st + '">' +
+        '<span class="at">' + clockStr(x.t) + '</span>' +
+        '<span class="tinfo"><span>' + (m <= 0 ? '곧 도착' : m + '분 후') + '</span>' +
+        '<span class="small">' + lab + '</span></span>' +
+        '<span class="tag" data-k="' + x.st + '">' + TAG[x.st] + '</span></li>';
+    }).join('') + '</ul>';
+  }
+
+  function tick(){
+    var now = Date.now() + offset;
+    var nd = new Date(now);
+    $('clock').textContent = clockStr(now) + ':' + pad(nd.getSeconds());
+    $('sample').hidden = offset === 0;
+
+    var kind = kindFor(svcBase(now));
+    var ev = evaluate(now, kind);
+    $('eyebrow').textContent = '학원에서 집으로 · ' + TABLES[kind].label + ' 시간표';
+    $('kind-wd').setAttribute('aria-pressed', kind === 'wd' ? 'true' : 'false');
+    $('kind-we').setAttribute('aria-pressed', kind === 'we' ? 'true' : 'false');
+
+    var status = $('status'), ch = ev.chosen;
+    if (ev.before){
+      status.setAttribute('data-state', 'idle');
+      $('badge').textContent = BADGE.idle;
+      $('headline').textContent = '아직 안내 시간 전이에요';
+      $('digits').textContent = '--:--';
+      $('countlabel').textContent = '';
+      $('note').textContent = '시간표가 21:00부터 있어서 ' + clockStr(ev.base + START*MIN - fastEff()*MIN) + ' 이후에 열면 안내해요.';
+    } else if (ch){
+      status.setAttribute('data-state', ch.st);
+      $('badge').textContent = BADGE[ch.st];
+      var prefix = ev.ci > 0 ? '먼저 오는 열차는 탈 수 없어서 다음 열차 기준이에요. ' : '';
+      var best = options(ch.link)[0];
+      var tail = ' 동암역에는 ' + clockStr(best.arr) + '쯤 도착해요' + (ch.link.known ? '.' : ' (추정).');
+      var base = clockStr(ch.t) + ' 삼성역 출발 열차';
+      if (ch.st === 'go'){
+        $('headline').textContent = '여유 있어요';
+        $('digits').textContent = msStr(ch.rem - S.walk*60);
+        $('countlabel').textContent = '안에 출발하면 보통 걸음으로 탈 수 있어요';
+        $('note').textContent = prefix + base + ', 보통 걸음 ' + S.walk + '분 기준이에요.' + tail;
+      } else {
+        $('headline').textContent = '서둘러 출발해요';
+        $('digits').textContent = msStr(ch.rem - fastEff()*60);
+        $('countlabel').textContent = '안에 나서면 빠른 걸음으로 탈 수 있어요';
+        $('note').textContent = prefix + base + ', 빠른 걸음 ' + fastEff() + '분 기준이에요.' + tail + ' 뛰지 말고 걸어요. 계단과 에스컬레이터에서는 천천히 가요.';
+      }
+    } else {
+      var hasMiss = ev.upcoming.some(function(x){ return x.st === 'miss'; });
+      status.setAttribute('data-state', 'miss');
+      $('badge').textContent = BADGE.miss;
+      $('headline').textContent = hasMiss ? '이번 열차는 어려워요' : '탈 수 있는 열차가 끝났어요';
+      $('digits').textContent = '--:--';
+      $('countlabel').textContent = '';
+      $('note').textContent = '무리해서 뛰지 말고 보호자에게 연락해 주세요.' + (hasMiss ? '' : ' 신도림에서 갈아탈 열차가 끝났을 수 있어요.');
+    }
+
+    var lh = listHTML(ev);
+    if (lh !== listKey){ listKey = lh; $('listBox').innerHTML = lh; }
+
+    var rk = (ch ? ch.t + '|' + ch.st : 'none') + '|' + kind + '|' + JSON.stringify(S);
+    if (rk !== routeKey){
+      routeKey = rk;
+      $('routeBox').innerHTML = ch
+        ? routeHTML(ch, ch.st)
+        : '<p class="empty">탈 수 있는 열차가 생기면 여기에 시간표가 나와요.</p>';
+    }
+  }
+
+  $('kind-wd').addEventListener('click', function(){ chooseKind('wd'); });
+  $('kind-we').addEventListener('click', function(){ chooseKind('we'); });
+
+  var FIELDS = {'s-walk':'walk','s-fast':'fast','s-ride2':'ride2','s-xfer':'xfer','s-loc':'rideL','s-dir':'rideE'};
+  function fillSettings(){ for (var id in FIELDS) $(id).value = S[FIELDS[id]]; }
+  fillSettings();
+  Object.keys(FIELDS).forEach(function(id){
+    $(id).addEventListener('input', function(){
+      var v = Number($(id).value);
+      if ($(id).value === '' || !isFinite(v) || v < 0) return;
+      S[FIELDS[id]] = v;
+      save();
+      tick();
+    });
+  });
+  $('reset').addEventListener('click', function(){
+    for (var kk in DEF) S[kk] = DEF[kk];
+    fillSettings(); save(); tick();
+  });
+
+  $('s-preview').addEventListener('input', function(){
+    var v = $('s-preview').value;
+    if (!v){ offset = 0; tick(); return; }
+    var p = v.split(':'), h = Number(p[0]);
+    var mins = h*60 + Number(p[1]);
+    if (h < 4) mins += 1440;
+    var real = Date.now();
+    offset = svcBase(real) + mins*MIN - real;
+    tick();
+  });
+  $('s-preview-clear').addEventListener('click', function(){
+    $('s-preview').value = '';
+    offset = 0;
+    tick();
+  });
+
+  tick();
+  setInterval(tick, 1000);
+})();
+</script>
+
+</body></html>
