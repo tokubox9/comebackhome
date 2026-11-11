@@ -142,7 +142,7 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
 <main class="app">
   <header class="top">
     <div>
-      <p class="eyebrow" id="eyebrow">학원에서 집으로</p>
+      <p class="eyebrow" id="eyebrow">브밸에서 집으로</p>
       <h1 aria-label="삼성역에서 2호선, 신도림역에서 1호선으로 갈아타고 동암역">삼성<span class="lb" aria-hidden="true">2</span>신도림<span class="lb l1" aria-hidden="true">1</span>동암</h1>
     </div>
     <div class="clock" id="clock" aria-label="현재 시각">--:--:--</div>
@@ -156,15 +156,15 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
         <button type="button" class="seg-btn" id="kind-we" aria-pressed="false">주말·공휴일</button>
       </div>
     </div>
-    <p class="small">평일에 쉬는 공휴일이면 "주말·공휴일"을 눌러 주세요. 토요일과 일요일은 자동으로 맞춰져요.</p>
+    <p class="small">평일에 쉬는 공휴일이면 "주말·공휴일"을 눌러 줘. 토요일과 일요일은 자동으로 맞춰져!</p>
   </div>
 
   <section class="status" id="status" data-state="idle">
     <div class="s-top">
       <span class="s-badge" id="badge">대기</span>
-      <span class="s-sample" id="sample" hidden>미리보기 시각이에요</span>
+      <span class="s-sample" id="sample" hidden>미리보기 시각이야</span>
     </div>
-    <h2 class="s-head" id="headline" aria-live="polite">시간표를 불러오는 중이에요</h2>
+    <h2 class="s-head" id="headline" aria-live="polite">시간표를 불러오는 중이야</h2>
     <div class="s-count">
       <span class="digits" id="digits">--:--</span>
       <span class="s-countlabel" id="countlabel"></span>
@@ -174,7 +174,7 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
 
   <section>
     <h2 class="sec-head"><span class="lb" aria-hidden="true">2</span>삼성역 다음 열차</h2>
-    <p class="sec-hint">신도림 방면 내선순환, 삼성역 출발 시각이에요. 신도림에서 갈아탈 열차가 없는 열차는 뺐어요.</p>
+    <p class="sec-hint">신도림 방면 내선순환, 삼성역 출발 시각이야. 신도림에서 갈아탈 열차가 없는 열차는 뺐어.</p>
     <div id="listBox"></div>
   </section>
 
@@ -186,10 +186,10 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
   <details class="settings">
     <summary>걷는 시간과 이동 시간 바꾸기</summary>
     <div class="set-grid">
-      <label class="field">학원에서 삼성역, 보통 걸음
+      <label class="field">브밸에서 삼성역, 보통 걸음
         <span class="in"><input id="s-walk" type="number" inputmode="numeric" min="1" max="60" step="1">분</span>
       </label>
-      <label class="field">학원에서 삼성역, 빠른 걸음 <span class="est">(추정)</span>
+      <label class="field">브밸에서 삼성역, 빠른 걸음 <span class="est">(추정)</span>
         <span class="in"><input id="s-fast" type="number" inputmode="numeric" min="1" max="60" step="1">분</span>
       </label>
       <label class="field">삼성에서 신도림, 2호선
@@ -205,7 +205,7 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
         <span class="in"><input id="s-dir" type="number" inputmode="numeric" min="1" max="120" step="1">분</span>
       </label>
     </div>
-    <p class="set-note">"추정"이라고 적힌 시간은 직접 타 본 시간으로 고쳐 두면 더 정확해져요. 바꾼 값은 이 기기에 저장돼요.</p>
+    <p class="set-note">"추정"이라고 적힌 시간은 직접 타 보고 고쳐 두면 더 정확해져. 바꾼 값은 이 기기에 저장돼!</p>
     <div class="set-actions"><button type="button" class="reset" id="reset">처음 값으로 되돌리기</button></div>
 
     <div class="field preview">시각 미리보기 (시험용)
@@ -214,10 +214,10 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
         <button type="button" class="reset" id="s-preview-clear">현재 시각으로</button>
       </span>
     </div>
-    <p class="set-note">낮에도 저녁 9시 이후 화면이 어떻게 나오는지 볼 수 있어요. 고른 시각부터 시간이 흘러가요.</p>
+    <p class="set-note">낮에도 저녁 9시 이후 화면이 어떻게 나오는지 볼 수 있어. 고른 시각부터 시간이 흘러가.</p>
   </details>
 
-  <p class="foot">삼성역(내선순환, 신도림 방면)과 신도림역(구로 방향) 시간표를 넣어 둔 화면이에요. 1호선은 인천행과 동인천행 급행만 안내해요. 실시간 도착 정보가 아니에요. 주말·공휴일은 신도림 시간표가 아직 없어서 환승 대기를 5분으로 추정해요.</p>
+  <p class="foot">삼성역(내선순환, 신도림 방면)과 신도림역(구로 방향) 시간표를 넣어 둔 화면이야. 1호선은 인천행과 동인천행 급행만 안내해.</p>
 </main>
 
 <script>
@@ -225,7 +225,7 @@ summary{cursor:pointer;font-weight:500;min-height:44px;display:flex;align-items:
 //LOGIC-START
 var MIN = 60000;
 var START = 21*60;            // timetables begin at 21:00
-var WAIT_EST = 5;             // minutes waited at Sindorim when there is no timetable (weekend)
+var WAIT_EST = 5;             // minutes waited at Sindorim when there is no timetable
 // 삼성역 행선지: S 성수(순환), D 신도림, E 을지로입구, H 홍대입구, N 서울대입구
 var NAMES = {S:'순환', D:'신도림행', E:'을지로입구행', H:'홍대입구행', N:'서울대입구행'};
 function reaches(c){ return c !== 'N'; }   // 서울대입구행은 신도림 앞에서 끝나요
@@ -247,7 +247,10 @@ var LINE1 = {
     loc: ['21:31','21:40','21:48','21:59','22:07','22:20','22:32','22:42','22:53','23:09','23:30','23:41','23:51'],
     exp: ['21:31','21:44','22:01','22:15','22:29','22:46','23:02']
   },
-  we: null
+  we: {
+    loc: ['21:31','21:40','21:50','22:01','22:18','22:42','22:52','23:00','23:09','23:20','23:31','23:44'],
+    exp: ['21:26','21:41','21:58','22:14','22:29','22:47','23:05']
+  }
 };
 var DEF = {walk:15, fast:12, ride2:34, xfer:5, rideL:30, rideE:22};
 var S = {}, k;
@@ -375,35 +378,35 @@ function evaluate(now, kind){
     var rows = opts.map(function(op, i){
       var sub;
       if (op.dep === null){
-        sub = '시간표가 없어서 대기 ' + WAIT_EST + '분으로 추정했어요';
+        sub = '시간표가 없어서 대기 ' + WAIT_EST + '분으로 추정했어';
       } else {
         var w = Math.round((op.dep - lk.ready)/MIN);
-        sub = clockStr(op.dep) + ' 출발 · ' + (w <= 0 ? '승강장에 도착하면 바로 타요' : '승강장에서 ' + w + '분 기다려요');
+        sub = clockStr(op.dep) + ' 출발 · ' + (w <= 0 ? '승강장에 도착하면 바로 타!' : '승강장에서 ' + w + '분 기다려');
       }
       return '<div class="eta-row"><div class="eta-info"><span class="eta-name">' + op.name +
-        (i === 0 ? '<span class="best">가장 빨라요</span>' : '') + '</span><span class="small">' + sub + '</span></div>' +
+        (i === 0 ? '<span class="best">가장 빠름</span>' : '') + '</span><span class="small">' + sub + '</span></div>' +
         '<span class="stop-time">' + clockStr(op.arr) + '</span></div>';
     }).join('');
     return '<ol class="route">' +
-      stop('늦어도 학원에서 출발', clockStr(leave), '걸어서 ' + walkMin + '분 (' + (st === 'go' ? '보통' : '빠른') + ' 걸음)', 'var(--walk)', 'var(--walk)', 'walk') +
+      stop('늦어도 브밸에서 출발', clockStr(leave), '걸어서 ' + walkMin + '분 (' + (st === 'go' ? '보통' : '빠른') + ' 걸음)', 'var(--walk)', 'var(--walk)', 'walk') +
       stop('삼성역 승차', clockStr(trainMs), '2호선 내선순환, 신도림까지 ' + S.ride2 + '분', 'var(--l2)', 'var(--l2)') +
       stop('신도림역 도착', clockStr(sin), '내려서 1호선 승강장까지 환승 ' + S.xfer + '분', 'var(--walk)', 'var(--l2)') +
-      stop('1호선 승강장 도착', clockStr(lk.ready), lk.known ? '아래 열차 중에서 탈 수 있어요' : '신도림 시간표가 없어서 대기 시간을 추정했어요', 'var(--l1)', 'var(--l1)') +
-      '<li class="stop" style="--dot:var(--l1)"><span class="dot"></span><div><div class="stop-name">동암역 도착</div>' +
+      stop('1호선 승강장 도착', clockStr(lk.ready), lk.known ? '아래 열차 중에서 타고 오면 돼' : '신도림 시간표가 없어서 대기 시간을 추정했어', 'var(--l1)', 'var(--l1)') +
+      '<li class="stop" style="--dot:var(--l1)"><span class="dot"></span><div><div class="stop-name">엄마빠 만나는곳 도착</div>' +
       '<div class="eta">' + rows + '</div></div></li></ol>';
   }
 
   function listHTML(ev){
-    if (ev.before) return '<p class="empty">이 시간표에는 21:00 이후 열차만 들어 있어요.</p>';
+    if (ev.before) return '<p class="empty">이 시간표에는 21:00 이후 열차만 들어 있어.</p>';
     var up = ev.upcoming;
-    if (!up.length) return '<p class="empty">시간표에 남은 열차가 없어요.</p>';
+    if (!up.length) return '<p class="empty">시간표에 남은 열차가 없어.</p>';
     var n = Math.max(4, ev.ci + 2);
     return '<ul class="tlist">' + up.slice(0, n).map(function(x, idx){
       var m = Math.ceil(x.rem/60);
       var pick = idx === ev.ci;
       var lab = NAMES[x.code];
-      if (!x.reach) lab += ' · 신도림 전에서 끝나요';
-      else if (!x.linked) lab += ' · 신도림에서 갈아탈 열차가 없어요';
+      if (!x.reach) lab += ' · 신도림 전에서 끝남';
+      else if (!x.linked) lab += ' · 신도림에서 갈아탈 열차가 없음';
       if (pick) lab += ' · 이 열차로 안내';
       return '<li class="trow' + (pick ? ' pick' : '') + '" data-k="' + x.st + '">' +
         '<span class="at">' + clockStr(x.t) + '</span>' +
@@ -421,7 +424,7 @@ function evaluate(now, kind){
 
     var kind = kindFor(svcBase(now));
     var ev = evaluate(now, kind);
-    $('eyebrow').textContent = '학원에서 집으로 · ' + TABLES[kind].label + ' 시간표';
+    $('eyebrow').textContent = '브밸에서 집으로 · ' + TABLES[kind].label + ' 시간표';
     $('kind-wd').setAttribute('aria-pressed', kind === 'wd' ? 'true' : 'false');
     $('kind-we').setAttribute('aria-pressed', kind === 'we' ? 'true' : 'false');
 
@@ -429,36 +432,36 @@ function evaluate(now, kind){
     if (ev.before){
       status.setAttribute('data-state', 'idle');
       $('badge').textContent = BADGE.idle;
-      $('headline').textContent = '아직 안내 시간 전이에요';
+      $('headline').textContent = '소을아, 아직 안내 시간 전이야';
       $('digits').textContent = '--:--';
       $('countlabel').textContent = '';
-      $('note').textContent = '시간표가 21:00부터 있어서 ' + clockStr(ev.base + START*MIN - fastEff()*MIN) + ' 이후에 열면 안내해요.';
+      $('note').textContent = '시간표가 21:00부터 있어서 ' + clockStr(ev.base + START*MIN - fastEff()*MIN) + ' 이후에 열면 안내해 줄게!';
     } else if (ch){
       status.setAttribute('data-state', ch.st);
       $('badge').textContent = BADGE[ch.st];
-      var prefix = ev.ci > 0 ? '먼저 오는 열차는 탈 수 없어서 다음 열차 기준이에요. ' : '';
+      var prefix = ev.ci > 0 ? '먼저 오는 열차는 탈 수 없어서 다음 열차 기준이야. ' : '';
       var best = options(ch.link)[0];
-      var tail = ' 동암역에는 ' + clockStr(best.arr) + '쯤 도착해요' + (ch.link.known ? '.' : ' (추정).');
+      var tail = ' 엄마빠 만나는곳에는 ' + clockStr(best.arr) + '쯤 도착해' + (ch.link.known ? '.' : ' (추정).');
       var base = clockStr(ch.t) + ' 삼성역 출발 열차';
       if (ch.st === 'go'){
-        $('headline').textContent = '여유 있어요';
+        $('headline').textContent = '소을아, 여유 있어!';
         $('digits').textContent = msStr(ch.rem - S.walk*60);
-        $('countlabel').textContent = '안에 출발하면 보통 걸음으로 탈 수 있어요';
-        $('note').textContent = prefix + base + ', 보통 걸음 ' + S.walk + '분 기준이에요.' + tail;
+        $('countlabel').textContent = '안에 출발하면 보통 걸음으로 탈 수 있어';
+        $('note').textContent = prefix + base + ', 보통 걸음 ' + S.walk + '분 기준이야.' + tail;
       } else {
-        $('headline').textContent = '서둘러 출발해요';
+        $('headline').textContent = '소을아, 서둘러 출발하자!';
         $('digits').textContent = msStr(ch.rem - fastEff()*60);
-        $('countlabel').textContent = '안에 나서면 빠른 걸음으로 탈 수 있어요';
-        $('note').textContent = prefix + base + ', 빠른 걸음 ' + fastEff() + '분 기준이에요.' + tail + ' 뛰지 말고 걸어요. 계단과 에스컬레이터에서는 천천히 가요.';
+        $('countlabel').textContent = '안에 나서면 빠른 걸음으로 탈 수 있어';
+        $('note').textContent = prefix + base + ', 빠른 걸음 ' + fastEff() + '분 기준이야.' + tail + ' 절대 뛰어가지 말고 조심히 걸어와~ 계단이랑 에스컬레이터에서는 더 조심하기!';
       }
     } else {
       var hasMiss = ev.upcoming.some(function(x){ return x.st === 'miss'; });
       status.setAttribute('data-state', 'miss');
       $('badge').textContent = BADGE.miss;
-      $('headline').textContent = hasMiss ? '이번 열차는 어려워요' : '탈 수 있는 열차가 끝났어요';
+      $('headline').textContent = hasMiss ? '소을아, 이번 열차는 타기 어려워' : '오늘 탈 수 있는 열차가 끝났어';
       $('digits').textContent = '--:--';
       $('countlabel').textContent = '';
-      $('note').textContent = '무리해서 뛰지 말고 보호자에게 연락해 주세요.' + (hasMiss ? '' : ' 신도림에서 갈아탈 열차가 끝났을 수 있어요.');
+      $('note').textContent = '무리해서 뛰지 말고 엄마나 아빠한테 바로 연락해 줘!' + (hasMiss ? '' : ' 신도림에서 갈아탈 열차가 끊겼을 수 있어.');
     }
 
     var lh = listHTML(ev);
@@ -469,7 +472,7 @@ function evaluate(now, kind){
       routeKey = rk;
       $('routeBox').innerHTML = ch
         ? routeHTML(ch, ch.st)
-        : '<p class="empty">탈 수 있는 열차가 생기면 여기에 시간표가 나와요.</p>';
+        : '<p class="empty">탈 수 있는 열차가 생기면 여기에 시간표가 나와.</p>';
     }
   }
 
